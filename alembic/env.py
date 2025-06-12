@@ -6,6 +6,7 @@ import sys
 import os
 from src.database import Base
 from src.auth.models import User
+from src.tasks.model import Task
 
 from alembic import context
 
