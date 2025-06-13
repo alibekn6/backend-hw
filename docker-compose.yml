@@ -26,5 +26,45 @@ services:
       - .:/app
     command: ["uvicorn", "src.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
 
+  celery:
+    build: .
+    command: celery -A celery_app.celery_app worker --loglevel=info
+    volumes:
+      - ./src:/app/src
+      - ./.env:/app/.env
+    depends_on:
+      - redis
+      - db
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app/src
+  
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - default
+
+  celery-beat:
+    build: .
+    command: celery -A celery_app.celery_app beat --loglevel=info
+    volumes:
+      - ./src:/app/src
+      - ./.env:/app/.env
+    depends_on:
+      - redis
+      - db
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app/src
+    working_dir: /app/src
+
+
+
+
 volumes:
   postgres_data:

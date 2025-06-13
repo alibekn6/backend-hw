@@ -25,11 +25,32 @@ async def get_task(
     return await TaskCRUD.get_task(db, task_id)
 
 
-# @router.get("/tasks", response_model=List[TaskResponse])
-# async def get_tasks(
-#     skip: int = Query(0, ge=0, description="Number of tasks to skip"),
-#     limit: int = Query(100, ge=1, le=1000, description="Maximum number of tasks to return"),
-#     db: AsyncSession = Depends(get_async_db)
-# ):
-#     """Get all tasks with pagination"""
-#     return await TaskCRUD.get_tasks(db, skip=skip, limit=limit)
+@router.get("/tasks", response_model=List[TaskResponse])
+async def get_tasks(
+    skip: int = Query(0, ge=0, description="Number of tasks to skip"),
+    limit: int = Query(0, ge=1, le=1000, description="Maximum number of tasks to return"),
+    db: AsyncSession = Depends(get_async_db),
+    ):
+
+    """Get all tasks with pagination"""
+    return await TaskCRUD.get_tasks(db, skip=skip, limit=limit)
+
+
+@router.put("/tasks/{task_id}", response_model=TaskResponse)
+async def update_task(
+    task_id: int = Path(..., description="The ID of the task to update"),
+    task: TaskUpdate = Body(...),
+    db: AsyncSession = Depends(get_async_db)
+):
+    """Update a specific task"""
+    return await TaskCRUD.update_task(db, task_id, task)
+
+
+@router.delete("/tasks/{task_id}")
+async def delete_task(
+    task_id: int = Path(..., description="The ID of the task to delete"),
+    db: AsyncSession = Depends(get_async_db)
+):
+    """Update a specific task"""
+    return await TaskCRUD.delete_task(db, task_id)
+
