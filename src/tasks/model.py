@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, Integer, String, JSON
 from sqlalchemy.sql import func
 from src.database import Base
 
@@ -12,3 +12,4 @@ class Task(Base):
     completed = Column(Boolean, default=False, nullable=True)
     created_at = Column(DateTime, default=func.now(), nullable=True)
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=True)
+    payload = Column(JSON, nullable=True)

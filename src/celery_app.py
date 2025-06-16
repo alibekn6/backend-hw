@@ -7,7 +7,8 @@ celery_app = Celery(
     backend=settings.celery_result_backend,
     include=[
         "src.celery_tasks",    # базовые демонстрационные таски
-        "src.tasks.tasks"      # «бизнес-таски» (add_random_task и т.п.)
+        "src.tasks.tasks",      # «бизнес-таски» (add_random_task и т.п.)
+        "src.data_fetch",
     ]
 )
 
