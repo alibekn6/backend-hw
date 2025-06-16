@@ -39,6 +39,8 @@ services:
       - .env
     environment:
       - PYTHONPATH=/app/src
+    working_dir: /app
+
   
 
   redis:
@@ -50,7 +52,7 @@ services:
 
   celery-beat:
     build: .
-    command: celery -A celery_app.celery_app beat --loglevel=info
+    command: celery -A src.celery_app.celery_app beat --loglevel=info
     volumes:
       - ./src:/app/src
       - ./.env:/app/.env
@@ -60,8 +62,9 @@ services:
     env_file:
       - .env
     environment:
-      - PYTHONPATH=/app/src
-    working_dir: /app/src
+      - PYTHONPATH=/app
+    working_dir: /app
+    
 
 
 
