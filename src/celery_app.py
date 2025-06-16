@@ -1,5 +1,6 @@
 from celery import Celery
 from src.config import settings
+from celery.schedules import crontab
 
 celery_app = Celery(
     "project",
@@ -8,7 +9,7 @@ celery_app = Celery(
     include=[
         "src.celery_tasks",    # базовые демонстрационные таски
         "src.tasks.tasks",      # «бизнес-таски» (add_random_task и т.п.)
-        "src.data_fetch",
+        "src.tasks.data_fetch",
     ]
 )
 
@@ -27,12 +28,18 @@ celery_app.conf.update(
 # Пример периодики (Celery Beat)
 celery_app.conf.beat_schedule = {
     "cleanup-every-5-min": {
-        "task": "celery_tasks.cleanup_old_data",
+        "task": "src.celery_tasks.cleanup_old_data",
         "schedule": 300.0,
     },
     "auto-random-task-daily": {
-        "task": "tasks.tasks.periodic_add_random_task",
+        "task": "src.tasks.tasks.periodic_add_random_task",
         "schedule": 86400.0,
+    },
+    
+    "fetch-cat-fact-every-minute": {
+        "task": "tasks.data_fetch.fetch_and_save_data",
+        "schedule": 86400.0,
+        # "options": {"queue": "data_fetch_queue"},
     },
 }
 
