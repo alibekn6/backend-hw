@@ -1,4 +1,3 @@
-from celery import current_app
 from src.celery_app import celery_app
 from src.redis_client import redis_client
 import time

@@ -28,7 +28,7 @@ services:
 
   celery:
     build: .
-    command: celery -A celery_app.celery_app worker --loglevel=info
+    command: celery -A src.celery_app worker --loglevel=info
     volumes:
       - ./src:/app/src
       - ./.env:/app/.env
@@ -38,7 +38,7 @@ services:
     env_file:
       - .env
     environment:
-      - PYTHONPATH=/app/src
+      - PYTHONPATH=/app
     working_dir: /app
 
   

@@ -1,6 +1,5 @@
 from celery import Celery
 from src.config import settings
-from celery.schedules import crontab
 
 celery_app = Celery(
     "project",
